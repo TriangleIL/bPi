@@ -1,0 +1,17 @@
+{
+	"name": "bPi",
+	"version": "0.0.1",
+	"private": true,
+	"scripts": {
+		"start": "node app.js"
+	},
+	"dependencies": {
+		"express": "3.2.5",
+		"socket.io": "0.9.14",
+		"jade": "*",
+		"folio": "0.2.x",
+		"backbone": "1.0.0",
+		"underscore": "1.4.x",
+		"jquery": "*"
+	}
+}

@@ -1,0 +1,41 @@
+doctype 5
+html
+	head
+		title= title
+		link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+		link(rel='stylesheet', href='/stylesheets/app.css')
+		link(rel='stylesheet', href='/stylesheets/messenger.css')
+		link(rel='stylesheet', href='/stylesheets/messenger-spinner.css')
+		link(rel='stylesheet', href='/stylesheets/messenger-theme-block.css')
+		
+		block scripts
+			script(src='https://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js')
+			script(src="/socket.io/socket.io.js")
+			script(src="/js/vendor.js")
+			script(src="/js/templates.js")
+			script(src="/js/bpi.js")
+
+	body(onload="updateClock(); setInterval('updateClock()', 1000)")
+		#content.container
+			.masthead			
+				h5#clock.muted.pull-right time
+				h3.muted(href='/')= title
+
+				.navbar
+					.navbar-inner
+						.container
+							ul.nav
+								li.active 
+									a(href='/') Home
+								li 
+									a(href='/manual') Manual
+								li 
+									a(href='/process') Process
+								li 
+									a(href='/config') Config
+
+			#content.container	
+				block content
+
+			footer#footer
+				
