@@ -3,7 +3,7 @@ bPi
 
 Automated beer making bot, controlled via a Raspberry Pi, I2C devices, and a Node.js web server
 
-Very crude demo here http://50.141.136.195:8080/ - very much a work in progress still at this point.
+Very crude demo here http://beerpi.servebeer.com:8080/ - very much a work in progress still at this point.
 
 Release Plans
 ---
