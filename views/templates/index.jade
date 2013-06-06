@@ -1,0 +1,23 @@
+extends ../layout
+append scripts
+	include
+	| <style type='text/css'>
+	| .hero-unit { padding: 20px; max-width: 960px;  }
+	| .well { padding: 15px; }
+	| .vessel-indicator { margin-right: -24px;}
+	| .vessel-heat { margin-top: 2px; }
+	| </style>
+	
+block content
+	div.row-fluid.hero-unit
+		#statusWrapper
+	div.row-fluid
+		.span4
+			.well
+				#hltWrapper
+		.span4
+			.well
+				#mltWrapper
+		.span4
+			.well	
+				#bkWrapper

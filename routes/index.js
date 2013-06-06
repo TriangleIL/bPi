@@ -42,6 +42,7 @@ var templateJs = new folio.Glossary([
 	require.resolve('jade/runtime.js'),
 	path.join(__dirname, '..', 'views/templates/js/header.js'),
 	// Home Screen Templates
+	path.join(__dirname, '..', 'views/templates/home.jade'),	
 	path.join(__dirname, '..', 'views/templates/homestatus.jade'),
 	path.join(__dirname, '..', 'views/templates/homevessel.jade'),
 	// Manual Screen Templates

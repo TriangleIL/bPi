@@ -1,5 +1,7 @@
 var BPi = {};
 
+//http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
+
 /*
  * App Router
  *
@@ -9,10 +11,14 @@ var BPi = {};
  BPi.App = Backbone.Router.extend({
   routes: {
     '': 'index',
-    '/': 'index'
+    '/': 'index',
+    'manual': 'manual'
   },
   index: function() {
-    log('inside router', this);
+    log('loading index', this);
+
+    var homeView = new BPi.HomeView();
+    $('#viewWrapper').append(homeView.el);
 
     var status = new BPi.Status();
     var hlt = new BPi.Vessel({id: 'hlt', heatOn: true, pumpOn: false});
@@ -32,6 +38,13 @@ var BPi = {};
     $('#bkWrapper').append(bkView.el);
 
     status.fetch();
+  },
+  manual: function() {
+    log('loading manual page', this);
+
+    var manualView = new BPi.ManualView();
+    $('#viewWrapper').append(manualView.el);
+
   }
 });
 
@@ -49,8 +62,8 @@ var BPi = {};
     _.bindAll(this, 'serverCreate', 'serverChange', 'modelCleanup');
 
     /*!
-     */
-     if (!this.noIoBind) {
+    */
+    if (!this.noIoBind) {
       this.ioBind('update', this.serverChange, this);
     }
   },
@@ -70,7 +83,7 @@ var BPi = {};
   }
 });
 
-BPi.Vessel = Backbone.Model.extend({
+ BPi.Vessel = Backbone.Model.extend({
   urlRoot: 'vessel',
   noIoBind: false,
   socket: window.socket,
@@ -82,28 +95,58 @@ BPi.Vessel = Backbone.Model.extend({
     }
   },
   serverCreate: function(data) {
-     console.log("create");
-    data.fromServer = true;
-    this.set(data);
+   console.log("create");
+   data.fromServer = true;
+   this.set(data);
+ },
+ serverChange: function(data){ 
+  console.log("change");
+  data.fromServer = true;
+  this.set(data);
+},
+modelCleanup: function() {
+  this.ioUnbindAll();
+  return this;
+}
+});
+
+/*
+ * Home View
+ *
+ */
+BPi.HomeView = Backbone.View.extend({
+  id: 'HomeView',
+  initialize: function() {
+    this.render();
   },
-  serverChange: function(data){ 
-    console.log("change");
-    data.fromServer = true;
-    this.set(data);
-  },
-  modelCleanup: function() {
-    this.ioUnbindAll();
+  render: function() {
+    $(this.el).html(template.home());
     return this;
   }
 });
 
 /*
- * Index View
- *
- * Default View for Status Models
+ * Manual View
  *
  */
-BPi.StatusView = Backbone.View.extend({
+ BPi.ManualView = Backbone.View.extend({
+  id: 'ManualView',
+  initialize: function() {
+    this.render();
+  },
+  render: function() {
+    $(this.el).html(template.manual());
+    return this;
+  }
+});
+
+/*
+ * Status View
+ *
+ * Status View for Status Models
+ *
+ */
+ BPi.StatusView = Backbone.View.extend({
   id: 'StatusView',
   events: {
     
@@ -121,7 +164,7 @@ BPi.StatusView = Backbone.View.extend({
   }
 });
 
-BPi.VesselView = Backbone.View.extend({
+ BPi.VesselView = Backbone.View.extend({
   id: 'VesselView',
   events: {
     'click .vessel-heat-indicator': 'toggleHeat',
@@ -169,7 +212,7 @@ BPi.VesselView = Backbone.View.extend({
     showMessage({message: 'Heater ' + this.model.get('id') + ' turned ' + onOff, type: 'success'});
   },
   togglePump: function() {
-    var onOff = this.model.get('heatOn') ? 'off' : 'on';
+    var onOff = this.model.get('pumpOn') ? 'off' : 'on';
     this.model.set('pumpOn', !this.model.get('pumpOn'));
     showMessage({message: 'Pump ' + this.model.get('id') + ' turned ' + onOff, type: 'success'});
   }
@@ -184,20 +227,20 @@ $(document).ready(function () {
 var Gauges = {};
 
 Gauges.sections = Array(steelseries.Section(0, 100, 'rgba(0, 0, 220, 0.3)'),
-                        steelseries.Section(100, 150, 'rgba(0, 220, 0, 0.3)'), 
-                        steelseries.Section(150, 200, 'rgba(220, 220, 0, 0.3)'));
+  steelseries.Section(100, 150, 'rgba(0, 220, 0, 0.3)'), 
+  steelseries.Section(150, 200, 'rgba(220, 220, 0, 0.3)'));
 
 
 Gauges.areas = Array(steelseries.Section(200, 212, 'rgba(220, 0, 0, 0.3)'));
 
 
 Gauges.valGrad = new steelseries.gradientWrapper(  0, 212,
-                        [ 0, 0.17, 0.39, 0.54, 1],
-                        [ new steelseries.rgbaColor(0, 0, 200, 1),
-                        new steelseries.rgbaColor(0, 200, 0, 1),
-                        new steelseries.rgbaColor(200, 200, 0, 1),
-                        new steelseries.rgbaColor(200, 0, 0, 1),
-                        new steelseries.rgbaColor(200, 0, 0, 1) ]);
+  [ 0, 0.17, 0.39, 0.54, 1],
+  [ new steelseries.rgbaColor(0, 0, 200, 1),
+  new steelseries.rgbaColor(0, 200, 0, 1),
+  new steelseries.rgbaColor(200, 200, 0, 1),
+  new steelseries.rgbaColor(200, 0, 0, 1),
+  new steelseries.rgbaColor(200, 0, 0, 1) ]);
 
 // Create a Temperature Gauge
 Gauges.createTempGauge = function(sel, title) {
@@ -241,14 +284,14 @@ Gauges.createVolumeGauge = function(sel) {
 };
 
 Gauges.createIndicator = function(sel, color) {
-    var indicator = new steelseries.Led(sel, {
-      width: 50,
-      height: 50,
-      blink: false,
-      ledColor: color
-    });
+  var indicator = new steelseries.Led(sel, {
+    width: 50,
+    height: 50,
+    blink: false,
+    ledColor: color
+  });
 
-    return indicator;
+  return indicator;
 };
 
 Gauges.createHeatIndicator = function(sel) {
@@ -260,7 +303,7 @@ Gauges.createPumpIndicator = function(sel) {
 }
 
 
- var showTemp = function(val) {
+var showTemp = function(val) {
   console.log(val);
   console.log($("#setTemp .field"));
   $("#setTemp .field").text(val);

@@ -11,3 +11,14 @@ div.row-fluid
 		canvas.vessel-heat(id=id+'Temp', width='160px', height='160px', onclick='showTemp("HLT")')
 	.span6
 		canvas.pull-right(id=id+'Volume', width='110px', height='240px')
+			div.well(height='148px')
+div.setTemp.hide
+	h3.muted.field Vessel
+	h4.muted Set New Temperature:
+	input	
+	h4.muted Turn Pump On/Off
+	input
+	h4.muted Fill/Empty Vessel?
+		input
+	button.btn.btn-success(name='Close', onclick="$('.setTemp').hide()")
+		i.icon-wrench OK
