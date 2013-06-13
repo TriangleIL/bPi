@@ -5,6 +5,14 @@ Automated beer making bot, controlled via a Raspberry Pi, I2C devices, and a Nod
 
 Very crude demo here http://beerpi.servebeer.com:8080/ - very much a work in progress still at this point.
 
+Installation
+---
+1. git clone this repo
+2. npm install . 
+3. node app
+4. (optional) install forever and run node via forever
+
+
 Release Plans
 ---
 
