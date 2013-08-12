@@ -23,6 +23,10 @@ var vendorJs = new folio.Glossary([
 	require.resolve('backbone/backbone.js'),
 	path.join(__dirname, '..', 'public', 'js', 'backbone.iobind.js'),
 	path.join(__dirname, '..', 'public', 'js', 'backbone.iosync.js'),
+	path.join(__dirname, '..', 'public', 'js', 'backbone.marionette', 'backbone.marionette.min.js'),
+	path.join(__dirname, '..', 'public', 'js', 'backbone.marionette', 'backbone.babysitter.js'),
+	path.join(__dirname, '..', 'public', 'js', 'backbone.marionette', 'backbone.wreqr.js'),	
+	path.join(__dirname, '..', 'public', 'js', 'backbone.marionette', 'json2.js'),	
 	path.join(__dirname, '..', 'public', 'js', 'bootstrap.min.js'),
 	path.join(__dirname, '..', 'public', 'js', 'tween-min.js'),
 	path.join(__dirname, '..', 'public', 'js', 'steelseries-min.js'),
@@ -46,7 +50,11 @@ var templateJs = new folio.Glossary([
 	path.join(__dirname, '..', 'views/templates/homestatus.jade'),
 	path.join(__dirname, '..', 'views/templates/homevessel.jade'),
 	// Manual Screen Templates
-	path.join(__dirname, '..', 'views/templates/manual.jade')
+	path.join(__dirname, '..', 'views/templates/manual.jade'),
+	// Process Screen Templates
+	path.join(__dirname, '..', 'views/templates/process.jade'),
+	// Config Screen Templates
+	path.join(__dirname, '..', 'views/templates/config.jade')
 ], {
 	compilers: {
 		jade: function (name, source) {

@@ -1,4 +1,55 @@
+// function (Marionette) {
+//   var app = new Marionette.Application();
+
+//   app.config = {
+//     apiUrl: 'api'
+//   };
+
+//   app.addRegions({
+//     wrapper: "#viewWrapper"
+//   });
+
+//   app.on("initialize:after", function() {
+//     Backbone.history.start();
+//   });
+
+//   app.vent.on('app:show', function(appView) {
+//     app.wrapper.show(appView);
+//   });
+
+//   app.addInitializer(function(options) {
+//     // we neeed to override loadTemplate because Marionette expect to recive only the template ID
+//     // but actually it's the full template html (require + text plugin)
+//     Backbone.Marionette.TemplateCache.prototype.loadTemplate = function (templateId) {
+//       var template = templateId;
+//       // remove this comment if you want to make sure you have a template before trying to compile it
+//       /*
+//       if (!template || template.length === 0) {
+//         var msg = "Could not find template: '" + templateId + "'";
+//         var err = new Error(msg);
+//         err.name = "NoTemplateError";
+//         throw err;
+//       }*/
+
+//       return template;
+//     };
+    
+//     // init ALL app routers
+//     _(options.routers).each(function(router) {
+//       new router();
+//     });
+
+//   });
+
+//   return app;
+// };
+
+/* OLD CODE BELOW */
+
 var BPi = {};
+
+// Another reorganization and then move the code to a branch and try this out?
+// https://github.com/psikocrisis/marionette-bootstrap/tree/master/js/app
 
 //http://lostechies.com/derickbailey/2011/12/12/composite-js-apps-regions-and-region-managers/
 
@@ -11,8 +62,10 @@ var BPi = {};
  BPi.App = Backbone.Router.extend({
   routes: {
     '': 'index',
-    '/': 'index',
-    'manual': 'manual'
+    'home': 'index',
+    'manual': 'manual',
+    'process': 'process',
+    'config': 'config'
   },
   index: function() {
     log('loading index', this);
@@ -45,7 +98,21 @@ var BPi = {};
     var manualView = new BPi.ManualView();
     $('#viewWrapper').append(manualView.el);
 
-  }
+  },
+  process: function() {
+    log('loading process page', this);
+
+   var processView = new BPi.ProcessView();
+   $('#viewWrapper').append(processView.el);
+
+ },
+ config: function() {
+   log('loading config page', this);
+
+   var configView = new BPi.ConfigView();
+   $('#viewWrapper').append(configView.el);
+
+ }
 });
 
 /*
@@ -83,6 +150,12 @@ var BPi = {};
   }
 });
 
+/*
+ * Vessel Model
+ *
+ * Default Vessel Model
+ * 
+ */
  BPi.Vessel = Backbone.Model.extend({
   urlRoot: 'vessel',
   noIoBind: false,
@@ -114,7 +187,7 @@ modelCleanup: function() {
  * Home View
  *
  */
-BPi.HomeView = Backbone.View.extend({
+ BPi.HomeView = Backbone.View.extend({
   id: 'HomeView',
   initialize: function() {
     this.render();
@@ -140,6 +213,36 @@ BPi.HomeView = Backbone.View.extend({
   }
 });
 
+ /*
+ * Process View
+ *
+ */
+ BPi.ProcessView = Backbone.View.extend({
+  id: 'ProcessView',
+  initialize: function() {
+    this.render();
+  },
+  render: function() {
+    $(this.el).html(template.process());
+    return this;
+  }
+});
+
+ /*
+ * Manual View
+ *
+ */
+ BPi.ConfigView = Backbone.View.extend({
+  id: 'ManualView',
+  initialize: function() {
+    this.render();
+  },
+  render: function() {
+    $(this.el).html(template.config());
+    return this;
+  }
+});
+
 /*
  * Status View
  *
@@ -149,7 +252,7 @@ BPi.HomeView = Backbone.View.extend({
  BPi.StatusView = Backbone.View.extend({
   id: 'StatusView',
   events: {
-    
+
   },
   initialize: function(status) {
     this.model = status;
